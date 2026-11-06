@@ -47,12 +47,13 @@
 ///   level 1  the document's title: large serif in the accent, a rule under.
 ///   level 2  a section: sans capitals over the rule.
 ///   level 3  a subsection: sans, medium, the secondary.
-#let document(body, size: 11pt, title: none, fonts: doc-fonts, paper: "a4", ink: oklch(19.77%, 0.007, 17.5deg)) = {
+#let document(body, size: 11pt, title: none, fonts: doc-fonts, paper: "a4", ink: palette.ink) = {
   let primary = palette.primary
   set text(font: fonts.body, size: size, fill: ink, lang: "en")
   set par(leading: 0.7em, spacing: 1em, justify: false)
   set page(
     paper: paper,
+    fill: palette.paper,
     margin: (x: 1.1in, top: 1in, bottom: 1in),
     numbering: "1",
     number-align: center,

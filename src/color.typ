@@ -60,10 +60,23 @@
   sienna: 50deg,
 )
 
+/// This fork's colors: Italian Roast, Tamarind and Rubine for the identity,
+/// a gold for emphasis and links, on a warm white paper grown from Camel Coat.
+#let swatches = (
+  camel: rgb("#C6B39A"),
+  gold: rgb("#C9A46D"),
+  rubine: rgb("#8D3A3C"),
+  tamarind: rgb("#3B1319"),
+  roast: rgb("#280B0F"),
+  paper: oklch(97.5%, 0.008, 75deg),
+)
+
 /// The named ramps.
 ///
-/// - `maroon`: the identity. Deep and saturated at the dark end, warming
-///   toward a pale blush at the light end. Headings, labels, links, rules.
+/// - `maroon`: the identity, in this fork Italian Roast, Tamarind and Rubine
+///   to the warm white. Headings, labels, links, rules.
+/// - `graphite`: the neutral, Italian Roast to the warm white.
+/// - `signal`: a deep gold to the gold and the warm white, for emphasis.
 /// - `blue`, `rose`, `teal`: the three role ramps (observed, acted, valued),
 ///   constant chroma so their mid-samples sit at matching weight.
 /// - `orange`: warnings. Interpolated in OKLab (as the thesis always has), so
@@ -71,7 +84,9 @@
 /// - `amber`: a short ramp that stops at 70% lightness, for strong accents.
 /// - `sienna`: an identity ramp like maroon, in a brownish orange.
 #let ramps = (
-  maroon: ramp(hues.maroon, chroma: (60%, 5%), hue-shift: 15deg),
+  maroon: gradient.linear(space: oklch, (oklch(5%, 0.015, 15deg), 0%), (swatches.roast, 15%), (swatches.tamarind, 24%), (swatches.rubine, 45%), (swatches.paper, 100%)),
+  graphite: gradient.linear(space: oklch, (oklch(6%, 0.015, 15deg), 0%), (swatches.roast, 15%), (swatches.paper, 100%)),
+  signal: gradient.linear(space: oklch, (oklch(14%, 0.03, 70deg), 0%), (oklch(52%, 0.10, 77deg), 52%), (swatches.gold, 74%), (swatches.paper, 100%)),
   blue: ramp(hues.blue, chroma: 0.116),
   rose: ramp(hues.rose, chroma: 0.124),
   teal: ramp(hues.teal, chroma: 0.104),
@@ -284,20 +299,24 @@
 
 // ---------------------------------------------------------------- palette --
 
-/// The identity's named colors on paper, each a sample or a quiet tone of
-/// the maroon ramp.
+/// The identity's named colors on paper, each a swatch, a sample or a quiet
+/// tone of the maroon ramp.
 ///
-/// - `primary`, `secondary`: the strong and medium samples.
-/// - `ink`, `ink-muted`: the near-black body text and its secondary.
+/// - `primary`: Tamarind, for titles, headings and the identity in figures.
+/// - `secondary`: the gold at its medium sample, deepened until it reads on
+///   the paper at subhead size; `link`: the gold as small text.
+/// - `ink`, `ink-muted`: Tamarind body text and the neutral's medium sample,
+///   deepened to read as small text.
+/// - `paper`: the warm white every page is set on.
 /// - `mark-fill`, `rule`, `mark-line`: the quiet tones at 97%, 90% and 80%:
 ///   panels and the diamond's fill, the capsule rule, the diamond's outline.
 #let palette = (
-  primary: ramps.maroon.sample(stops.strong),
-  secondary: ramps.maroon.sample(stops.medium),
-  link: readable(ramps.maroon, stops.strong),
-  ink: oklch(28.91%, 0, 0deg),
-  ink-muted: oklch(45.68%, 0, 0deg),
-  paper: white,
+  primary: swatches.tamarind,
+  secondary: readable(ramps.signal, stops.medium, need: text-needs.subhead, on: swatches.paper),
+  link: readable(ramps.signal, stops.strong, on: swatches.paper),
+  ink: swatches.tamarind,
+  ink-muted: readable(ramps.graphite, stops.medium, on: swatches.paper),
+  paper: swatches.paper,
   mark-fill: quiet(ramps.maroon, stops.fill),
   rule: quiet(ramps.maroon, stops.rule),
   mark-line: quiet(ramps.maroon, stops.line),
